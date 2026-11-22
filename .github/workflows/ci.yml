@@ -29,8 +29,9 @@ jobs:
             desktop-file-utils
 
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@master
+        uses: dtolnay/rust-toolchain@stable
         with:
+          toolchain: stable
           components: rustfmt, clippy
 
       - name: Cache Cargo dependencies
