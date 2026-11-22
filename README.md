@@ -72,27 +72,19 @@ Neutron acts as a **Steam Compatibility Tool** (or Launch Options wrapper) paire
 
 ## Installation
 
-### Arch Linux / CachyOS (AUR)
-
-Install the stable release or latest git version using an AUR helper:
-
-```bash
-# Stable release
-yay -S neutron
-# or
-paru -S neutron
-
-# Latest development snapshot
-yay -S neutron-git
-```
-
-### Arch Linux (Prebuilt `pacman` Package)
+### Arch Linux / CachyOS (Prebuilt `pacman` Package)
 
 Download `neutron-<version>-1-x86_64.pkg.tar.zst` from the [GitHub Releases](https://github.com/romulof/neutron/releases) page and install it with `pacman`:
 
 ```bash
 sudo pacman -U neutron-*-x86_64.pkg.tar.zst
 ```
+
+You can also build and install the Arch package directly from source via [packaging/arch/PKGBUILD](packaging/arch/PKGBUILD) (`makepkg -si`).
+
+### Arch Linux / CachyOS (AUR — *Pending*)
+
+> **Note:** `neutron` and `neutron-git` are not yet published on the AUR while new AUR registrations are closed (tracked in [#1](https://github.com/romulof/neutron/issues/1)). Once published, they will be installable via `yay -S neutron` / `paru -S neutron` (or `neutron-git`). In the meantime, use the prebuilt `pacman` package above or `makepkg -si`.
 
 ### Standalone AppImage
 
