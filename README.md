@@ -128,42 +128,50 @@ make install-user
 
 ### Usage
 
-1. **Steam Compatibility Tool** *(Recommended for Proton games)*:
-   Select **Neutron** in **Steam Settings -> Compatibility** (or game **Properties -> Compatibility**). Steam invokes `neutron waitforexitandrun <game.exe>`, and Neutron manages the selected Proton version, Steam Linux Runtime, wrappers, and environment overrides.
+Choose **one** of the two Steam integration modes below depending on your game, or run the **Settings Manager** standalone anytime:
 
-   <div align="center">
-     <table>
-       <thead>
-         <tr>
-           <th align="center">Steam Global Compatibility</th>
-           <th align="center">Per-Game Compatibility</th>
-         </tr>
-       </thead>
-       <tbody>
-         <tr>
-           <td align="center">
-             <a href="docs/screenshots/steam-settings-compatibility.png" target="_blank" rel="noopener noreferrer">
-               <img src="docs/screenshots/steam-settings-compatibility.png" alt="Steam Settings Compatibility" width="360" />
-             </a>
-           </td>
-           <td align="center">
-             <a href="docs/screenshots/steam-game-compatibility.png" target="_blank" rel="noopener noreferrer">
-               <img src="docs/screenshots/steam-game-compatibility.png" alt="Steam Game Compatibility" width="360" />
-             </a>
-           </td>
-         </tr>
-       </tbody>
-     </table>
-   </div>
+#### Option A: Steam Compatibility Tool *(Recommended for Proton games)*
 
-2. **Steam Launch Options** *(Works for native Linux and Proton games)*:
-   Set a game's Launch Options in Steam to:
-   ```text
-   neutron launch %command%
-   ```
-   *(Note: Proton version selection is handled by Steam before Launch Options run.)*
-3. **Standalone Settings Manager**:
-   Run `neutron` from your application launcher or terminal.
+Select **Neutron** in **Steam Settings -> Compatibility** (or game **Properties -> Compatibility**). Steam invokes `neutron waitforexitandrun <game.exe>`, and Neutron manages the selected Proton version, Steam Linux Runtime, wrappers, and environment overrides.
+
+<div align="center">
+  <table>
+    <thead>
+      <tr>
+        <th align="center">Steam Global Compatibility</th>
+        <th align="center">Per-Game Compatibility</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td align="center">
+          <a href="docs/screenshots/steam-settings-compatibility.png" target="_blank" rel="noopener noreferrer">
+            <img src="docs/screenshots/steam-settings-compatibility.png" alt="Steam Settings Compatibility" width="360" />
+          </a>
+        </td>
+        <td align="center">
+          <a href="docs/screenshots/steam-game-compatibility.png" target="_blank" rel="noopener noreferrer">
+            <img src="docs/screenshots/steam-game-compatibility.png" alt="Steam Game Compatibility" width="360" />
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+#### Option B: Steam Launch Options *(Alternative — works for native Linux and Proton games)*
+
+Instead of selecting Neutron as a compatibility tool, set a game's Launch Options in Steam to:
+
+```text
+neutron launch %command%
+```
+
+*(Note: In this mode, Steam selects and resolves Proton before Launch Options run, so Neutron's Proton version selector does not apply.)*
+
+#### Standalone Settings Manager
+
+Run `neutron` from your application launcher or terminal to configure global defaults and per-game overrides directly.
 
 ---
 
