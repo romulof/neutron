@@ -72,6 +72,24 @@ Neutron acts as a **Steam Compatibility Tool** (or Launch Options wrapper) paire
 
 ## Installation
 
+### Quick Install (Latest Stable Release)
+
+Installs the latest verified release automatically (`pacman` package on Arch/CachyOS, or user-local tarball into `~/.local` on other distributions):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/romulof/neutron/latest/scripts/install.sh | bash
+```
+
+You can also explicitly choose user-local or AppImage installation:
+
+```bash
+# User-local binary + desktop + Steam compat tool (~/.local)
+curl -fsSL https://raw.githubusercontent.com/romulof/neutron/latest/scripts/install.sh | bash -s -- --user
+
+# Standalone AppImage (~/.local/bin/neutron + desktop + Steam compat tool)
+curl -fsSL https://raw.githubusercontent.com/romulof/neutron/latest/scripts/install.sh | bash -s -- --appimage
+```
+
 ### Arch Linux / CachyOS (Prebuilt `pacman` Package)
 
 Download `neutron-<version>-1-x86_64.pkg.tar.zst` from the [GitHub Releases](https://github.com/romulof/neutron/releases) page and install it with `pacman`:

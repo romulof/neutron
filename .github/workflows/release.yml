@@ -86,12 +86,20 @@ jobs:
           mkdir -p dist staging
           make DESTDIR="$PWD/staging" PREFIX=/usr install
           tar -C staging -czf "dist/neutron-${VERSION}-x86_64-linux-gnu.tar.gz" .
-          (cd dist && sha256sum "neutron-${VERSION}-x86_64-linux-gnu.tar.gz" > "neutron-${VERSION}-x86_64-linux-gnu.tar.gz.sha256")
+          cp "dist/neutron-${VERSION}-x86_64-linux-gnu.tar.gz" "dist/neutron-x86_64-linux-gnu.tar.gz"
+          (
+            cd dist
+            sha256sum "neutron-${VERSION}-x86_64-linux-gnu.tar.gz" > "neutron-${VERSION}-x86_64-linux-gnu.tar.gz.sha256"
+            sha256sum "neutron-x86_64-linux-gnu.tar.gz" > "neutron-x86_64-linux-gnu.tar.gz.sha256"
+          )
 
       - name: Build standalone AppImage
         env:
           VERSION: ${{ needs.prepare.outputs.version }}
-        run: ./packaging/appimage/build-appimage.sh
+        run: |
+          ./packaging/appimage/build-appimage.sh
+          cp "dist/Neutron-${VERSION}-x86_64.AppImage" "dist/Neutron-x86_64.AppImage"
+          (cd dist && sha256sum "Neutron-x86_64.AppImage" > "Neutron-x86_64.AppImage.sha256")
 
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4
@@ -136,6 +144,8 @@ jobs:
           su - builder -c "cd /tmp/archbuild && makepkg -s --noconfirm --skipchecksums"
           mkdir -p dist-arch
           find /tmp/archbuild -maxdepth 1 -name 'neutron-*.pkg.tar.zst' ! -name 'neutron-debug-*.pkg.tar.zst' -exec cp {} dist-arch/ \;
+          pkg_file="$(find dist-arch -maxdepth 1 -name 'neutron-*.pkg.tar.zst' -print -quit)"
+          cp "$pkg_file" "dist-arch/neutron-x86_64.pkg.tar.zst"
           (cd dist-arch && for f in *.pkg.tar.zst; do sha256sum "$f" > "$f.sha256"; done)
 
       - name: Upload Arch artifacts
@@ -182,4 +192,11 @@ jobs:
             else
               gh release create "$TAG" artifacts/* --title "Neutron $TAG" --generate-notes
             fi
+          fi
+
+          if [[ ! "$TAG" =~ - ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag -fa latest -m "Latest stable release ($TAG)"
+            git push -f origin latest
           fi
