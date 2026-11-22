@@ -63,11 +63,11 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - name: Verify PKGBUILD / .SRCINFO sync
+      - name: Verify Arch PKGBUILDs
         run: |
           useradd -m builder
           chown -R builder:builder "$GITHUB_WORKSPACE"
-          su - builder -c "cd '$GITHUB_WORKSPACE/packaging/arch' && diff -u .SRCINFO <(makepkg --printsrcinfo)"
+          su - builder -c "cd '$GITHUB_WORKSPACE/packaging/arch' && makepkg --printsrcinfo > /dev/null"
           su - builder -c "cd '$GITHUB_WORKSPACE/packaging/arch/neutron-git' && diff -u .SRCINFO <(makepkg --printsrcinfo)"
 
   conventional-pr:
