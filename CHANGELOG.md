@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 via [Conventional Commits](https://www.conventionalcommits.org/).
 
+## [1.1.0](https://github.com/romulof/neutron/compare/v1.0.0...v1.1.0) (2026-11-22)
+
+
+### Features
+
+* **install:** add one-liner installer script and latest release tag automation ([1188853](https://github.com/romulof/neutron/commit/11888537e399d379f49711136fc25da07c105378))
+
 ## [1.0.0] - 2026-11-22
 
 ### Features

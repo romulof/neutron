@@ -1,6 +1,6 @@
 [package]
 name = "neutron"
-version = "1.0.0"
+version = "1.1.0"
 description = "Steam Proton compatibility tool and environment manager UI"
 edition = "2024"
 license = "MIT"

@@ -1,6 +1,6 @@
 # Maintainer: Rômulo Ruas <romulo.fernandes@gmail.com>
 pkgname=neutron
-pkgver=1.0.0 # x-release-please-version
+pkgver=1.1.0 # x-release-please-version
 pkgrel=1
 pkgdesc="Steam Proton compatibility tool and environment manager UI"
 arch=('x86_64' 'aarch64')
