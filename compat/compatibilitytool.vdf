@@ -1,0 +1,14 @@
+"compatibilitytools"
+{
+  "compat_tools"
+  {
+    "neutron-proton"
+    {
+      "install_path" "."
+      "display_name" "Neutron"
+      "aliases"      "neutron"
+      "from_oslist"  "windows"
+      "to_oslist"    "linux"
+    }
+  }
+}

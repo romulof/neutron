@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    name: Format, Clippy, Test & Build
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libgtk-4-dev \
+            libadwaita-1-dev \
+            pkg-config \
+            desktop-file-utils
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          components: rustfmt, clippy
+
+      - name: Cache Cargo dependencies
+        uses: Swatinem/rust-cache@v2
+
+      - name: Check formatting
+        run: cargo fmt --check
+
+      - name: Run Clippy
+        run: cargo clippy --all-targets -- -D warnings
+
+      - name: Run tests
+        run: cargo test --locked
+
+      - name: Validate desktop entry
+        run: desktop-file-validate desktop/neutron.desktop
+
+      - name: Build release binary
+        run: cargo build --release --locked
+
+  arch-metadata:
+    name: Validate Arch PKGBUILD & .SRCINFO
+    runs-on: ubuntu-24.04
+    container:
+      image: archlinux:base-devel
+    steps:
+      - name: Install git
+        run: pacman -Syu --noconfirm --needed git
+
+      - uses: actions/checkout@v4
+
+      - name: Verify PKGBUILD / .SRCINFO sync
+        run: |
+          useradd -m builder
+          chown -R builder:builder "$GITHUB_WORKSPACE"
+          su - builder -c "cd '$GITHUB_WORKSPACE/packaging/arch' && diff -u .SRCINFO <(makepkg --printsrcinfo)"
+          su - builder -c "cd '$GITHUB_WORKSPACE/packaging/arch/neutron-git' && diff -u .SRCINFO <(makepkg --printsrcinfo)"
+
+  conventional-pr:
+    name: Conventional PR Title
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            perf
+            refactor
+            docs
+            style
+            test
+            build
+            ci
+            chore
+            revert

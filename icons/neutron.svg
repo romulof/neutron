@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Background squircle gradient -->
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#222638"/>
+      <stop offset="100%" stop-color="#12141e"/>
+    </linearGradient>
+
+    <!-- Top bevel highlight -->
+    <linearGradient id="top-bevel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.14"/>
+      <stop offset="15%" stop-color="#ffffff" stop-opacity="0.02"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Squircle border stroke -->
+    <linearGradient id="border-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4a5278" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#1d2030" stop-opacity="0.5"/>
+    </linearGradient>
+
+    <!-- Core ambient glow -->
+    <radialGradient id="core-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00f2fe" stop-opacity="0.5"/>
+      <stop offset="45%" stop-color="#4facfe" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Core sphere gradient (The Neutron Nucleus) -->
+    <radialGradient id="core-sphere" cx="35%" cy="32%" r="68%">
+      <stop offset="0%" stop-color="#f0fdff"/>
+      <stop offset="25%" stop-color="#38d9a9"/>
+      <stop offset="60%" stop-color="#0ca678"/>
+      <stop offset="90%" stop-color="#087f5b"/>
+      <stop offset="100%" stop-color="#053e2d"/>
+    </radialGradient>
+
+    <!-- Orbit 1 gradient (Cyan to Electric Teal) -->
+    <linearGradient id="orbit-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f2fe"/>
+      <stop offset="100%" stop-color="#38d9a9"/>
+    </linearGradient>
+
+    <!-- Orbit 2 gradient (Proton Purple to Magenta) -->
+    <linearGradient id="orbit-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f72585"/>
+      <stop offset="100%" stop-color="#7209b7"/>
+    </linearGradient>
+
+    <!-- Orbit 3 gradient (Electric Blue to Indigo) -->
+    <linearGradient id="orbit-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4cc9f0"/>
+      <stop offset="100%" stop-color="#4361ee"/>
+    </linearGradient>
+
+    <!-- Particle Glows -->
+    <radialGradient id="particle-cyan" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="45%" stop-color="#00f2fe"/>
+      <stop offset="100%" stop-color="#0088cc"/>
+    </radialGradient>
+
+    <radialGradient id="particle-pink" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="45%" stop-color="#ff4d8d"/>
+      <stop offset="100%" stop-color="#b5179e"/>
+    </radialGradient>
+
+    <radialGradient id="particle-blue" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="45%" stop-color="#4cc9f0"/>
+      <stop offset="100%" stop-color="#3a0ca3"/>
+    </radialGradient>
+
+    <!-- Squircle Shadow -->
+    <filter id="tile-shadow" x="-12%" y="-12%" width="124%" height="128%">
+      <feDropShadow dx="0" dy="5" stdDeviation="5.5" flood-color="#000000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <!-- Base Squircle -->
+  <rect x="10" y="10" width="108" height="108" rx="27" ry="27" fill="url(#bg-grad)" filter="url(#tile-shadow)"/>
+  <rect x="10" y="10" width="108" height="108" rx="27" ry="27" fill="url(#top-bevel)"/>
+  <rect x="10.5" y="10.5" width="107" height="107" rx="26.5" ry="26.5" fill="none" stroke="url(#border-grad)" stroke-width="1.2"/>
+
+  <!-- Ambient Glow -->
+  <circle cx="64" cy="64" r="38" fill="url(#core-glow)"/>
+
+  <!-- ================= Back Orbit Arcs ================= -->
+  <!-- Orbit 1 (tilted 30 deg): back arc -->
+  <g transform="rotate(30 64 64)">
+    <path d="M 18,64 A 46,17 0 0,1 110,64" fill="none" stroke="url(#orbit-cyan)" stroke-width="3.2" stroke-linecap="round" opacity="0.55"/>
+  </g>
+
+  <!-- Orbit 2 (tilted -30 deg): back arc -->
+  <g transform="rotate(-30 64 64)">
+    <path d="M 18,64 A 46,17 0 0,1 110,64" fill="none" stroke="url(#orbit-purple)" stroke-width="3.2" stroke-linecap="round" opacity="0.55"/>
+  </g>
+
+  <!-- Orbit 3 (vertical 90 deg): back arc -->
+  <g transform="rotate(90 64 64)">
+    <path d="M 18,64 A 46,17 0 0,1 110,64" fill="none" stroke="url(#orbit-blue)" stroke-width="3.2" stroke-linecap="round" opacity="0.55"/>
+  </g>
+
+  <!-- ================= Central Nucleus ================= -->
+  <!-- Outer Energy Membrane -->
+  <circle cx="64" cy="64" r="18" fill="none" stroke="#20c997" stroke-width="1" opacity="0.35"/>
+  <!-- Solid Nucleus Sphere -->
+  <circle cx="64" cy="64" r="15.5" fill="url(#core-sphere)"/>
+  <!-- Specular highlights -->
+  <ellipse cx="59.5" cy="58.5" rx="5.5" ry="3.5" transform="rotate(-30 59.5 58.5)" fill="#ffffff" opacity="0.75"/>
+  <circle cx="58" cy="57" r="1.6" fill="#ffffff" opacity="0.95"/>
+
+  <!-- ================= Front Orbit Arcs ================= -->
+  <!-- Orbit 1 (tilted 30 deg): front arc -->
+  <g transform="rotate(30 64 64)">
+    <path d="M 110,64 A 46,17 0 0,1 18,64" fill="none" stroke="url(#orbit-cyan)" stroke-width="3.2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Orbit 2 (tilted -30 deg): front arc -->
+  <g transform="rotate(-30 64 64)">
+    <path d="M 110,64 A 46,17 0 0,1 18,64" fill="none" stroke="url(#orbit-purple)" stroke-width="3.2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Orbit 3 (vertical 90 deg): front arc -->
+  <g transform="rotate(90 64 64)">
+    <path d="M 110,64 A 46,17 0 0,1 18,64" fill="none" stroke="url(#orbit-blue)" stroke-width="3.2" stroke-linecap="round"/>
+  </g>
+
+  <!-- ================= Orbiting Particles ================= -->
+  <!-- Particle 1 on Cyan Orbit: apex at (104, 87) -->
+  <circle cx="104" cy="87" r="6" fill="#00f2fe" opacity="0.3"/>
+  <circle cx="104" cy="87" r="4.2" fill="url(#particle-cyan)"/>
+  <circle cx="103" cy="86" r="1.2" fill="#ffffff"/>
+
+  <!-- Particle 2 on Purple Orbit: apex at (24, 87) -->
+  <circle cx="24" cy="87" r="6" fill="#f72585" opacity="0.3"/>
+  <circle cx="24" cy="87" r="4.2" fill="url(#particle-pink)"/>
+  <circle cx="23" cy="86" r="1.2" fill="#ffffff"/>
+
+  <!-- Particle 3 on Blue Orbit: apex at (64, 18) -->
+  <circle cx="64" cy="18" r="6" fill="#4cc9f0" opacity="0.3"/>
+  <circle cx="64" cy="18" r="4.2" fill="url(#particle-blue)"/>
+  <circle cx="63" cy="17" r="1.2" fill="#ffffff"/>
+</svg>

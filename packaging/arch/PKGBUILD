@@ -1,0 +1,50 @@
+# Maintainer: Rômulo Ruas <romulo.fernandes@gmail.com>
+pkgname=neutron
+pkgver=1.0.0 # x-release-please-version
+pkgrel=1
+pkgdesc="Steam Proton compatibility tool and environment manager UI"
+arch=('x86_64' 'aarch64')
+url="https://github.com/romulof/neutron"
+license=('MIT')
+depends=(
+  'gcc-libs'
+  'glibc'
+  'gtk4'
+  'hicolor-icon-theme'
+  'libadwaita'
+)
+makedepends=('cargo')
+optdepends=(
+  'gamemode: Feral GameMode performance governor support'
+  'gamescope: SteamOS GameScope micro-compositor support'
+  'mangohud: MangoHud performance overlay support'
+  'steam: Steam client and Proton compatibility tool integration'
+)
+source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
+sha256sums=('SKIP')
+options=('!debug')
+
+prepare() {
+  cd "$pkgname-$pkgver"
+  export RUSTUP_TOOLCHAIN=stable
+  cargo fetch --locked --target "$(rustc -vV | sed -n 's/host: //p')"
+}
+
+build() {
+  cd "$pkgname-$pkgver"
+  export RUSTUP_TOOLCHAIN=stable
+  export CARGO_TARGET_DIR=target
+  cargo build --frozen --release --all-features
+}
+
+check() {
+  cd "$pkgname-$pkgver"
+  export RUSTUP_TOOLCHAIN=stable
+  export CARGO_TARGET_DIR=target
+  cargo test --frozen --all-features
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  make DESTDIR="$pkgdir" PREFIX=/usr install
+}

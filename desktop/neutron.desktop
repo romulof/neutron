@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Neutron
+GenericName=Steam Game Environment Manager
+Comment=Configure Proton versions, GameScope, and environment variables for Steam games
+Exec=neutron
+Icon=neutron
+Terminal=false
+Type=Application
+Categories=Game;
+Keywords=steam;proton;gamescope;gamemode;gaming;
+StartupWMClass=com.github.romulof.neutron
+StartupNotify=true

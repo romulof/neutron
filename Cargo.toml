@@ -1,0 +1,24 @@
+[package]
+name = "neutron"
+version = "1.0.0"
+description = "Steam Proton compatibility tool and environment manager UI"
+edition = "2024"
+license = "MIT"
+repository = "https://github.com/romulof/neutron"
+homepage = "https://github.com/romulof/neutron"
+readme = "README.md"
+keywords = ["steam", "proton", "linux-gaming", "gtk4", "libadwaita"]
+categories = ["games", "gui"]
+publish = false
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+gtk4 = "0.9"
+libadwaita = { version = "0.7", features = ["v1_5"] }
+
+[lints.clippy]
+collapsible_if = "allow"
+too_many_arguments = "allow"
+needless_borrow = "allow"
+redundant_locals = "allow"
+

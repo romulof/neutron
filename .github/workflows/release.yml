@@ -1,0 +1,183 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_call:
+    inputs:
+      tag:
+        description: "Release tag (e.g. v1.0.0)"
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to build (e.g. v1.0.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    outputs:
+      tag: ${{ steps.meta.outputs.tag }}
+      version: ${{ steps.meta.outputs.version }}
+    steps:
+      - name: Resolve and validate release metadata
+        id: meta
+        env:
+          RAW_TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          if [[ ! "$RAW_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then
+            echo "Error: invalid release tag '$RAW_TAG' (expected vX.Y.Z)" >&2
+            exit 1
+          fi
+          VERSION="${RAW_TAG#v}"
+          echo "tag=$RAW_TAG" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+  build-linux:
+    name: Build Binary Tarball & AppImage
+    needs: prepare
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.tag }}
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libgtk-4-dev \
+            libadwaita-1-dev \
+            librsvg2-dev \
+            libgdk-pixbuf-2.0-dev \
+            libglib2.0-dev-bin \
+            pkg-config \
+            desktop-file-utils \
+            appstream \
+            patchelf \
+            file \
+            curl
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+
+      - name: Cache Cargo dependencies
+        uses: Swatinem/rust-cache@v2
+
+      - name: Run tests
+        run: cargo test --locked
+
+      - name: Build release binary
+        run: cargo build --release --locked
+
+      - name: Create Linux release tarball
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          mkdir -p dist staging
+          make DESTDIR="$PWD/staging" PREFIX=/usr install
+          tar -C staging -czf "dist/neutron-${VERSION}-x86_64-linux-gnu.tar.gz" .
+          (cd dist && sha256sum "neutron-${VERSION}-x86_64-linux-gnu.tar.gz" > "neutron-${VERSION}-x86_64-linux-gnu.tar.gz.sha256")
+
+      - name: Build standalone AppImage
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: ./packaging/appimage/build-appimage.sh
+
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-artifacts
+          path: dist/*
+
+  build-arch:
+    name: Build Arch Linux Package (pacman)
+    needs: prepare
+    runs-on: ubuntu-24.04
+    container:
+      image: archlinux:base-devel
+    steps:
+      - name: Install Arch dependencies
+        run: |
+          pacman -Syu --noconfirm --needed \
+            git \
+            rust \
+            gtk4 \
+            libadwaita \
+            hicolor-icon-theme
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.tag }}
+
+      - name: Build pacman package with makepkg
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          PKG_VER="${VERSION//-/.}"
+          useradd -m builder
+          echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+          mkdir -p /tmp/archbuild
+          git archive --format=tar.gz --prefix="neutron-${PKG_VER}/" HEAD -o "/tmp/archbuild/neutron-${PKG_VER}.tar.gz"
+          cp packaging/arch/PKGBUILD /tmp/archbuild/PKGBUILD
+          sed -i "s/^pkgver=.*/pkgver=${PKG_VER}/" /tmp/archbuild/PKGBUILD
+          chown -R builder:builder /tmp/archbuild
+
+          su - builder -c "cd /tmp/archbuild && makepkg -s --noconfirm --skipchecksums"
+          mkdir -p dist-arch
+          find /tmp/archbuild -maxdepth 1 -name 'neutron-*.pkg.tar.zst' ! -name 'neutron-debug-*.pkg.tar.zst' -exec cp {} dist-arch/ \;
+          (cd dist-arch && for f in *.pkg.tar.zst; do sha256sum "$f" > "$f.sha256"; done)
+
+      - name: Upload Arch artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: arch-artifacts
+          path: dist-arch/*
+
+  publish-release:
+    name: Publish GitHub Release
+    needs: [prepare, build-linux, build-arch]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ needs.prepare.outputs.tag }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Generate release notes with git-cliff
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: --tag "${{ needs.prepare.outputs.tag }}" --current --strip header
+        env:
+          OUTPUT: RELEASE_NOTES.md
+
+      - name: Upload assets or create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ needs.prepare.outputs.tag }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            # Preserve release-please's generated release notes when the release already exists
+            gh release upload "$TAG" artifacts/* --clobber
+          else
+            if [[ -s RELEASE_NOTES.md ]]; then
+              gh release create "$TAG" artifacts/* --title "Neutron $TAG" --notes-file RELEASE_NOTES.md
+            else
+              gh release create "$TAG" artifacts/* --title "Neutron $TAG" --generate-notes
+            fi
+          fi

@@ -1,0 +1,11 @@
+/.cache/
+/dist/
+/target/
+packaging/arch/src/
+packaging/arch/pkg/
+packaging/arch/*.tar.gz
+packaging/arch/*.pkg.tar.*
+packaging/arch/neutron-git/src/
+packaging/arch/neutron-git/pkg/
+packaging/arch/neutron-git/neutron-git/
+packaging/arch/neutron-git/*.pkg.tar.*

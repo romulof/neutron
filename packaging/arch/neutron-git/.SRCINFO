@@ -1,0 +1,26 @@
+pkgbase = neutron-git
+	pkgdesc = Steam Proton compatibility tool and environment manager UI
+	pkgver = 1.0.0.r0.g0000000
+	pkgrel = 1
+	url = https://github.com/romulof/neutron
+	arch = x86_64
+	arch = aarch64
+	license = MIT
+	makedepends = cargo
+	makedepends = git
+	depends = gcc-libs
+	depends = glibc
+	depends = gtk4
+	depends = hicolor-icon-theme
+	depends = libadwaita
+	optdepends = gamemode: Feral GameMode performance governor support
+	optdepends = gamescope: SteamOS GameScope micro-compositor support
+	optdepends = mangohud: MangoHud performance overlay support
+	optdepends = steam: Steam client and Proton compatibility tool integration
+	provides = neutron
+	conflicts = neutron
+	options = !debug
+	source = neutron-git::git+https://github.com/romulof/neutron.git
+	sha256sums = SKIP
+
+pkgname = neutron-git
