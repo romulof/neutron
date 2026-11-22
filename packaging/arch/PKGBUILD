@@ -21,7 +21,7 @@ optdepends=(
   'steam: Steam client and Proton compatibility tool integration'
 )
 source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
-sha256sums=('SKIP')
+sha256sums=('f48e94f61878caf74a91d36f5bffd464f0b15813422d86db8779ec5c040f7a4d')
 options=('!debug')
 
 prepare() {

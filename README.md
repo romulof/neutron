@@ -84,7 +84,7 @@ You can also build and install the Arch package directly from source via [packag
 
 ### Arch Linux / CachyOS (AUR — *Pending*)
 
-> **Note:** `neutron` and `neutron-git` are not yet published on the AUR while new AUR registrations are closed (tracked in [#1](https://github.com/romulof/neutron/issues/1)). Once published, they will be installable via `yay -S neutron` / `paru -S neutron` (or `neutron-git`). In the meantime, use the prebuilt `pacman` package above or `makepkg -si`.
+> **Note:** `neutron-bin` and `neutron-git` are not yet published on the AUR while new AUR registrations are closed (tracked in [#1](https://github.com/romulof/neutron/issues/1)). The `neutron` package name is reserved for future official Arch Linux repository packaging. Once published to AUR, they will be installable via `yay -S neutron-bin` / `paru -S neutron-bin` (or `neutron-git`). In the meantime, use the prebuilt `pacman` package above or `makepkg -si`.
 
 ### Standalone AppImage
 

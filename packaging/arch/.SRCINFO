@@ -18,6 +18,6 @@ pkgbase = neutron
 	optdepends = steam: Steam client and Proton compatibility tool integration
 	options = !debug
 	source = neutron-1.0.0.tar.gz::https://github.com/romulof/neutron/archive/refs/tags/v1.0.0.tar.gz
-	sha256sums = SKIP
+	sha256sums = f48e94f61878caf74a91d36f5bffd464f0b15813422d86db8779ec5c040f7a4d
 
 pkgname = neutron

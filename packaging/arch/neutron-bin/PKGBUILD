@@ -1,0 +1,30 @@
+# Maintainer: Rômulo Ruas <romulo.fernandes@gmail.com>
+pkgname=neutron-bin
+pkgver=1.0.0 # x-release-please-version
+pkgrel=1
+pkgdesc="Steam Proton compatibility tool and environment manager UI (prebuilt binary)"
+arch=('x86_64')
+url="https://github.com/romulof/neutron"
+license=('MIT')
+depends=(
+  'gcc-libs'
+  'glibc'
+  'gtk4'
+  'hicolor-icon-theme'
+  'libadwaita'
+)
+optdepends=(
+  'gamemode: Feral GameMode performance governor support'
+  'gamescope: SteamOS GameScope micro-compositor support'
+  'mangohud: MangoHud performance overlay support'
+  'steam: Steam client and Proton compatibility tool integration'
+)
+provides=('neutron')
+conflicts=('neutron')
+options=('!debug' '!strip')
+source=("$pkgname-$pkgver.tar.gz::$url/releases/download/v$pkgver/neutron-$pkgver-x86_64-linux-gnu.tar.gz")
+sha256sums=('87ef89b8433fb7acf831ab0851bc0d20aabbebe2b251ce40373439a5b2fa219e')
+
+package() {
+  cp -a --no-preserve=ownership "$srcdir/usr" "$pkgdir/"
+}

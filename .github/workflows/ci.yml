@@ -68,6 +68,7 @@ jobs:
           useradd -m builder
           chown -R builder:builder "$GITHUB_WORKSPACE"
           su - builder -c "cd '$GITHUB_WORKSPACE/packaging/arch' && makepkg --printsrcinfo > /dev/null"
+          su - builder -c "cd '$GITHUB_WORKSPACE/packaging/arch/neutron-bin' && makepkg --printsrcinfo > /dev/null"
           su - builder -c "cd '$GITHUB_WORKSPACE/packaging/arch/neutron-git' && diff -u .SRCINFO <(makepkg --printsrcinfo)"
 
   conventional-pr:

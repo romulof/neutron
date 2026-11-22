@@ -11,6 +11,10 @@
         {
           "type": "generic",
           "path": "packaging/arch/PKGBUILD"
+        },
+        {
+          "type": "generic",
+          "path": "packaging/arch/neutron-bin/PKGBUILD"
         }
       ]
     }
