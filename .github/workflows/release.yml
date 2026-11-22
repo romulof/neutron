@@ -128,7 +128,7 @@ jobs:
           echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
           mkdir -p /tmp/archbuild
-          git archive --format=tar.gz --prefix="neutron-${PKG_VER}/" HEAD -o "/tmp/archbuild/neutron-${PKG_VER}.tar.gz"
+          git -c safe.directory="$PWD" archive --format=tar.gz --prefix="neutron-${PKG_VER}/" HEAD -o "/tmp/archbuild/neutron-${PKG_VER}.tar.gz"
           cp packaging/arch/PKGBUILD /tmp/archbuild/PKGBUILD
           sed -i "s/^pkgver=.*/pkgver=${PKG_VER}/" /tmp/archbuild/PKGBUILD
           chown -R builder:builder /tmp/archbuild
