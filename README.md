@@ -72,48 +72,50 @@ Neutron acts as a **Steam Compatibility Tool** (or Launch Options wrapper) paire
 
 ## Installation
 
-### Quick Install (Latest Stable Release)
+### Arch Linux / CachyOS
 
-Installs the latest verified release automatically (`pacman` package on Arch/CachyOS, or user-local tarball into `~/.local` on other distributions):
+#### Quick Install
+
+Install the latest verified release automatically via `pacman`:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/romulof/neutron/latest/scripts/install.sh | bash
 ```
 
-You can also explicitly choose user-local or AppImage installation:
+#### Prebuilt `pacman` Package
 
-```bash
-# User-local binary + desktop + Steam compat tool (~/.local)
-curl -fsSL https://raw.githubusercontent.com/romulof/neutron/latest/scripts/install.sh | bash -s -- --user
-
-# Standalone AppImage (~/.local/bin/neutron + desktop + Steam compat tool)
-curl -fsSL https://raw.githubusercontent.com/romulof/neutron/latest/scripts/install.sh | bash -s -- --appimage
-```
-
-### Arch Linux / CachyOS (Prebuilt `pacman` Package)
-
-Download `neutron-<version>-1-x86_64.pkg.tar.zst` from the [GitHub Releases](https://github.com/romulof/neutron/releases) page and install it with `pacman`:
+Download `neutron-<version>-1-x86_64.pkg.tar.zst` (or `neutron-x86_64.pkg.tar.zst`) from [GitHub Releases](https://github.com/romulof/neutron/releases) and install it with `pacman`:
 
 ```bash
 sudo pacman -U neutron-*-x86_64.pkg.tar.zst
 ```
 
-You can also build and install the Arch package directly from source via [packaging/arch/PKGBUILD](packaging/arch/PKGBUILD) (`makepkg -si`).
+You can also build and install directly from source via [packaging/arch/PKGBUILD](packaging/arch/PKGBUILD) (`makepkg -si`).
 
-### Arch Linux / CachyOS (AUR — *Pending*)
+#### AUR (*Pending*)
 
-> **Note:** `neutron-bin` and `neutron-git` are not yet published on the AUR while new AUR registrations are closed (tracked in [#1](https://github.com/romulof/neutron/issues/1)). The `neutron` package name is reserved for future official Arch Linux repository packaging. Once published to AUR, they will be installable via `yay -S neutron-bin` / `paru -S neutron-bin` (or `neutron-git`). In the meantime, use the prebuilt `pacman` package above or `makepkg -si`.
+> **Note:** `neutron-bin` and `neutron-git` are not yet published on the AUR while new AUR registrations are closed (tracked in [#1](https://github.com/romulof/neutron/issues/1)). The `neutron` package name is reserved for future official Arch Linux repository packaging. Once published to AUR, they will be installable via `yay -S neutron-bin` / `paru -S neutron-bin` (or `neutron-git`).
+
+---
 
 ### Standalone AppImage
 
-Download `Neutron-<version>-x86_64.AppImage` from [GitHub Releases](https://github.com/romulof/neutron/releases) *(requires `glibc >= 2.39`, e.g. Arch/CachyOS, Ubuntu 24.04+, Fedora 40+; requires `libfuse2` unless `APPIMAGE_EXTRACT_AND_RUN=1` is set)*:
+*(Requires `glibc >= 2.39`, e.g. Arch/CachyOS, Ubuntu 24.04+, Fedora 40+; requires `libfuse2` unless `APPIMAGE_EXTRACT_AND_RUN=1` is set.)*
+
+Install the latest AppImage with desktop and Steam integration into `~/.local`:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/romulof/neutron/latest/scripts/install.sh | bash -s -- --appimage
+```
+
+Or download `Neutron-<version>-x86_64.AppImage` manually from [GitHub Releases](https://github.com/romulof/neutron/releases):
 
 ```bash
 chmod +x Neutron-*-x86_64.AppImage
 ./Neutron-*-x86_64.AppImage
 ```
 
-#### Using the AppImage with Steam
+#### Using a Manually Downloaded AppImage with Steam
 
 - **Launch Options mode** (works for both native and Proton games):
   ```text
@@ -124,16 +126,24 @@ chmod +x Neutron-*-x86_64.AppImage
   ```bash
   mkdir -p ~/.local/share/Steam/compatibilitytools.d/neutron
   ln -sf /path/to/Neutron-<version>-x86_64.AppImage ~/.local/share/Steam/compatibilitytools.d/neutron/neutron
-  curl -fsSL https://raw.githubusercontent.com/romulof/neutron/main/compat/compatibilitytool.vdf \
+  curl -fsSL https://raw.githubusercontent.com/romulof/neutron/latest/compat/compatibilitytool.vdf \
     -o ~/.local/share/Steam/compatibilitytools.d/neutron/compatibilitytool.vdf
-  curl -fsSL https://raw.githubusercontent.com/romulof/neutron/main/compat/toolmanifest.vdf \
+  curl -fsSL https://raw.githubusercontent.com/romulof/neutron/latest/compat/toolmanifest.vdf \
     -o ~/.local/share/Steam/compatibilitytools.d/neutron/toolmanifest.vdf
   ```
   Restart Steam and select **Neutron** under **Steam Settings -> Compatibility**.
 
-### Manual Installation (`make`)
+---
 
-To build and install Neutron system-wide (`/usr`) or for your current user (`~/.local`):
+### Manual Installation
+
+On non-Arch distributions, you can install the latest prebuilt user-local bundle into `~/.local`:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/romulof/neutron/latest/scripts/install.sh | bash -s -- --user
+```
+
+Or build and install from source using `make`:
 
 ```bash
 # System-wide installation (requires sudo)
@@ -144,11 +154,13 @@ sudo make install PREFIX=/usr
 make install-user
 ```
 
-### Usage
+---
+
+## Configuration
 
 Choose **one** of the two Steam integration modes below depending on your game, or run the **Settings Manager** standalone anytime:
 
-#### Option A: Steam Compatibility Tool *(Recommended for Proton games)*
+### Option A: Steam Compatibility Tool *(Recommended for Proton games)*
 
 Select **Neutron** in **Steam Settings -> Compatibility** (or game **Properties -> Compatibility**). Steam invokes `neutron waitforexitandrun <game.exe>`, and Neutron manages the selected Proton version, Steam Linux Runtime, wrappers, and environment overrides.
 
@@ -177,7 +189,7 @@ Select **Neutron** in **Steam Settings -> Compatibility** (or game **Properties 
   </table>
 </div>
 
-#### Option B: Steam Launch Options *(Alternative — works for native Linux and Proton games)*
+### Option B: Steam Launch Options *(Alternative — works for native Linux and Proton games)*
 
 Instead of selecting Neutron as a compatibility tool, set a game's Launch Options in Steam to:
 
@@ -187,7 +199,7 @@ neutron launch %command%
 
 *(Note: In this mode, Steam selects and resolves Proton before Launch Options run, so Neutron's Proton version selector does not apply.)*
 
-#### Standalone Settings Manager
+### Standalone Settings Manager
 
 Run `neutron` from your application launcher or terminal to configure global defaults and per-game overrides directly.
 
